@@ -1,13 +1,17 @@
 import Vue from 'vue';
-import Vant from 'vant';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import 'lib-flexible';
-import 'vant/lib/index.css';
+import animated from 'animate.css';
+import './style/style.less';
+import './eventBus'
+import showMessage from '@/util/showMessage'
 
-Vue.use(Vant);
+
+store.dispatch("login/whoami");
 Vue.config.productionTip = false;
+Vue.use(animated)
+Vue.prototype.$showMessage = showMessage;
 
 new Vue({
   router,
