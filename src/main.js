@@ -1,16 +1,21 @@
-import Vue from 'vue';
-import Vant from 'vant';
-import App from './App.vue';
-import router from './router';
-import store from './store';
-import 'lib-flexible';
-import 'vant/lib/index.css';
+import Vue from 'vue'
+import App from './App.vue'
+import './mock/index.js'
+import "./style/style.less"
+import './api/banner'
+import './eventBus.js'
+import store from '@/store'
+store.dispatch("setting/setSetting")
+import router from './router'
+import lazy from './directive/lazy.js'
+import loading from './directive/loading.js'
+import showMessage from './util/showMessage'
 
-Vue.use(Vant);
-Vue.config.productionTip = false;
-
+Vue.prototype.$showMessage = showMessage;
+Vue.directive("loading",loading);
+Vue.directive("lazy",lazy);
 new Vue({
   router,
-  store,
-  render: (h) => h(App),
-}).$mount('#app');
+  render: h => h(App),
+  store:store,
+}).$mount('#app')

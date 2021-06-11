@@ -1,15 +1,11 @@
-const px2rem = require('postcss-px2rem');
 
 module.exports = {
-  css: {
-    loaderOptions: {
-      postcss: {
-        plugins: [
-          px2rem({
-            remUnit: 37.5,
-          }),
-        ],
-      },
+    devServer:{
+        proxy:{
+            '/api':{
+                target:"http://localhost:8080"
+            }
+        }
     },
-  },
-};
+    configureWebpack:require("./webpack.config"),
+}

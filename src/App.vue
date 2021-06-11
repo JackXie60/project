@@ -1,57 +1,58 @@
 <template>
-  <div id="app">
-    <transition :name="transitionName" :mode="this.$router.back?'out-in':'in-out'">
-      <router-view class="view"></router-view>
-    </transition>
+  <div class="home-container">
+      <Layout>
+          <template #left>
+              <SideBar></SideBar>
+          </template>
+          <template #content>
+              <div class="content-wrapper">
+                <router-view></router-view>
+              </div>
+          </template>
+      </Layout>
+      <Top/>
   </div>
 </template>
-<script>
-import Vue from 'vue';
-import { mapMutations } from 'vuex';
-import api from './api/index';
 
-Vue.prototype.$api = api;
+<script>
+import Layout from '@/components/Layout';
+import SideBar from '@/components/SideBar';
+import Top from '@/components/Top';
 export default {
-  methods: {
-    ...mapMutations(['resetGoodsList']),
-  },
-  data() {
-    return {
-      transitionName: 'left',
-    };
-  },
-  created() {
-    const counterMap = JSON.parse(localStorage.getItem('goods')) || {};
-    this.$store.commit('setCounterMap', counterMap);
-  },
-  watch: {
-    $router(to, from) {
-      if (to.name === 'classify' && from.name === 'search') {
-        this.resetGoodsList();
-        this.$router.back = true;
-      }
-      if (this.$router.back) {
-        this.transitionName = 'right';
-      } else {
-        this.transitionName = 'left';
-      }
-      this.$router.back = false;
+    components:{
+        Layout,
+        SideBar,
+        Top,
     },
-  },
-};
+    methods: {
+    }
+}
 </script>
+
+
 <style lang="less">
-.view{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transition: transform .3s;
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
 }
-.left-enter{
-  transform: translate(100%,0);
+
+#nav {
+  padding: 30px;
+
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
 }
-.right-leave-to{
-  transform: translate(100%,0);
+.content-wrapper{
+  height: 100vh;
 }
 </style>

@@ -1,0 +1,33 @@
+@import "../style/mixin.less";
+.iconfont{
+    color: inherit;
+    font-size: inherit;
+}
+.showMessage{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 80px;
+    background: #4e6ef2;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 80px;
+    color: #fff;
+    transition: 0.5s;
+    letter-spacing: 4px;
+    box-shadow: -3px 0px 2px #aaa,0px 3px 2px #aaa;
+}
+.primary{
+    background-color: #6b9eee
+}
+.warn{
+    background-color: #dc6a12;
+}
+.success{
+    background-color: #7ebf50;
+}
+.center{
+    .self-center();
+}
