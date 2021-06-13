@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            margin: 0;
+             
+        }
+        #root{
+            display: flex;
+            justify-content: center;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+        #panel{
+            width: 480px;
+            height: 600px;
+            background-color: black;
+            position: relative;
+        }
+        #next{
+            margin-left: 1em;
+            border: 1px solid black;
+            position: relative;
+            width: 180px;
+            background-color: blanchedalmond;
+        }
+        .content{
+            width: 100%;
+            position: absolute;
+            top: 30%;
+        }
+        #score{
+            font-size: 50px;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+        }
+        #desc{
+            margin-left: 1em;
+            font-size: 14px;
+        }
+        #msg{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: rgb(117, 112, 112);
+            opacity: 0.8;
+            display: none;
+            z-index: 999;;
+        }
+        #msg > p{
+            position: absolute;
+            margin: 0px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            border: 3px solid red;
+            padding: 6px;
+            color: #fff;
+            background-color: rgb(156, 114, 114);
+        }
+    </style>
+</head>
+<body>
+    <div id="root">
+        <div id="panel">
+            <div id="msg">
+                <p>
+                    暂停游戏
+                </p>
+            </div>
+        </div>
+        <div id="next">
+            <div class="content">
+                <div id="score">
+                    0
+                </div>
+                <div id="desc">
+                    <p>
+                        请使用鼠标来操作游戏
+                    </p>
+                    <p>
+                        ↑ : 旋转
+                    </p>
+                    <p>
+                        ← : 向左
+                    </p>
+                    <p>
+                        → : 向右
+                    </p>
+                    <p>
+                        ↓ : 向下
+                    </p>
+                    <p>
+                        空格 : 开始/暂停
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
