@@ -1,0 +1,20 @@
+<template>
+	<!-- 图标分类组件 -->
+	<div class="flex-row w-100 px-2 flex-wrap mb-3">
+		<div class="d-flex flex-column j-center a-center mt-3" style="width: 142px;"
+			v-for="(item,index) in indexnav">
+			<image :src="item.src" style="width: 58px;height: 58px;"></image>
+			<text class="font text-muted mt-1">{{ item.text }}</text>
+		</div>
+	</div>
+</template>
+
+<script>
+	export default {
+		props:['indexnav']
+	}
+</script>
+<style src="@/common/zcm-main-nvue.css"></style>
+<style>
+
+</style>

@@ -1,0 +1,19 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "uni-number-box": "/components/uni-number-box/uni-number-box",
+    "swiper-image": "/components/index/swiper-image",
+    "detail-info": "/components/detail/base-info",
+    "detail-feature": "/components/detail/detail-feature",
+    "uni-list-item": "/components/comm/uni-list-item",
+    "scroll-comments": "/components/detail/scroll-comment",
+    "u-parse": "/components/uni-ui/uParse/src/wxParse",
+    "card": "/components/comm/card",
+    "comm-list": "/components/comm/comm-list",
+    "home-bottom": "/components/detail/home-bottom",
+    "popup": "/components/comm/popup",
+    "price": "/components/comm/price",
+    "my-radio-group": "/components/search-list/radio-group"
+  }
+}

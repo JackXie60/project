@@ -1,0 +1,9 @@
+{
+  "onReachBottomDistance": 50,
+  "usingComponents": {
+    "card": "/components/comm/card",
+    "color-tag": "/components/search/color-tag",
+    "uni-list-item": "/components/comm/uni-list-item",
+    "uni-list": "/components/uni-ui/uni-list/uni-list"
+  }
+}

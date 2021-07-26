@@ -1,0 +1,225 @@
+<template>
+	<div>
+		<!-- 顶部选项卡 -->
+		<SumTabbar :tabBar="tabBars" :tabIndex="tabIndex" @changeBar="changeBar($event,index)"></SumTabbar>
+		<!-- 横向滚动列表 -->
+		<slider class="flex-1" :index="tabIndex" @change="changeCur" :infinite="false">
+			<list :show-scrollbar="false" v-for="(list,index) in newItems" :key="index">
+				<!-- 下拉刷新 -->
+				<template v-if="list.data.length>0">
+					<refresh class="w-100 d-flex j-center a-center" @pullingdown="pullDown" :display="list.refreshShow"
+						style="height: 80px;" @refresh="refresh">
+						<text class="font-md text-muted">{{ list.refreshText }}</text>
+					</refresh>
+					<cell v-for="(listItem,itemIndex) in list.data">
+						<!-- 轮播图组件 -->
+						<SumSlider v-if="listItem.type==='swiper'" :swipers="listItem.data" />
+						<template v-else-if="listItem.type==='indexnavs'">
+							<!-- 图标分类组件 -->
+							<IndexNav :indexnav="listItem.data" />
+							<!-- 分割线 -->
+							<Divider></Divider>
+						</template>
+						<!-- 三图广告位 -->
+						<ThreeAdv v-else-if="listItem.type==='threeAdv'" :threeAdv="listItem.data" />
+						<!-- 大图广告 -->
+						<SumOne v-else-if="listItem.type==='oneAdv'" :titleHead="listItem.data.title"
+							:bodyCover="listItem.data.cover">
+						</SumOne>
+						<!-- 列表组件 -->
+						<CommList v-else-if="listItem.type==='list'" :list="listItem.data"></CommList>
+					</cell>
+					<!-- 上拉加载 -->
+					<!-- <view v-if="(list.loadingText==='没有更多了')"> -->
+						<loading @loading="onLoading(list)" :display="list.loadingShow">
+							<text class="font-md text-muted" 
+								style="text-align:center; 80px;line-height: 80px;width: 750px;">加载中...</text>
+						</loading>
+					<!-- </view> -->
+				</template>
+				<template v-else>			
+					<cell class="d-flex a-center j-center mt-5">
+							<text class="text-light-muted font-lg" style="padding-left: -70rpx;">
+								暂无数据
+							</text>
+					</cell>
+				</template>
+			</list>
+
+		</slider>
+	</div>
+</template>
+
+<script>
+	import $H from '@/common/lib/request.js';
+	import SumSlider from '@/components/index/nvue/sum-slider.nvue'
+	import IndexNav from '@/components/comm/nvue/index-nav.nvue'
+	import Divider from '@/components/comm/nvue/divider.nvue'
+	import ThreeAdv from '@/components/index/nvue/three-adv.nvue'
+	import SumOne from '@/components/comm/nvue/sum-one.nvue'
+	import price from '@/components/comm/nvue/price.nvue'
+	import CommList from '@/components/index/nvue/comm-list.nvue'
+	import SumTabbar from '@/components/index/nvue/sum-tabbar.nvue'
+	const dom = weex.requireModule('dom')
+	const currentWebView = plus.webview.currentWebview();
+	export default {
+		components: {
+			SumSlider,
+			IndexNav,
+			Divider,
+			ThreeAdv,
+			SumOne,
+			price,
+			CommList,
+			SumTabbar
+		},
+		created() {
+			//模拟onShow，监听当前窗口显示
+			currentWebView.addEventListener('show', e => {
+				console.log('indexshow')
+			})
+			// 监听点击搜索
+			// 初始化事件
+			this.__init()
+		},
+		onNavigationBarSearchInputClicked() {
+			uni.navigateTo({
+				url: '../search/search'
+			})
+		},
+		beforeDestroy() {
+			//模拟onShow，监听当前窗口显示
+			currentWebView.removeEventListener('show', e => {});
+		},
+		data() {
+			return {
+				refreshShow: 'hide',
+				refreshtext: '',
+				tabIndex: 0,
+				newItems: [],
+				tabBars: [],
+
+			}
+
+		},
+		methods: {
+			changeBar(index) {
+				this.tabIndex = index;
+			},
+			async __init() {
+				$H.get('/index_category/data').then(res=>{
+					//成功
+					//初始化tabBar
+					this.tabBars = res.category;
+					//初始化页面
+					this.newItems = this.setNewItems(res)
+				});
+			},
+			changeCur(e) {
+				this.tabIndex = e.index;
+				if(this.newItems[this.tabIndex].firstLoad==='before'){
+					this.addData()
+				}
+			},
+			onLoading(list) {
+				let index = this.tabIndex
+				list.loadingShow = 'show'
+				if (list.loadingText === '没有更多了') {
+					uni.showToast({
+						title: '没有更多了',
+						icon: 'none',
+					})
+					this.$nextTick(()=>{
+						list.loadingShow = 'hide';
+					})
+					return;
+				}
+				this.addData(() => {
+					uni.showToast({
+						title: '加载成功',
+						icon: 'none'
+					});
+					list.loadingShow = 'hide';
+				})
+			},
+			refresh() {
+				let index = this.tabIndex
+				this.newItems[index].refreshShow = 'show';
+				this.newItems[index].refreshText = '正在刷新...';
+				//刷新完成
+				this.addData(()=>{
+					this.newItems[index].refreshShow = 'hide';
+					this.newItems[index].refreshText = '刷新完成';
+				},true)
+			},
+			pullDown(e) {
+				let index = this.tabIndex
+				console.log(index)
+				if (e.pullingDistance > e.viewHeight) {
+					this.newItems[index].refreshText = '释放刷新'
+				} else {
+					this.newItems[index].refreshText = '下拉刷新'
+				}
+			},
+			//初始化页
+			setNewItems(data) {
+				let ary = [];
+				// 拿到tabbars的长度，根据长度生成页面
+				let tablength = this.tabBars.length;
+				for (let i = 0; i < tablength; i++) {
+					let firstLoad = i===0?'after':'before'
+					let aryItem = {
+						refreshShow: 'hide',
+						refreshText: '下拉可以刷新',
+						loadingShow: 'hide',
+						data: [],
+						firstLoad,
+					};
+					// 给页面添加数据
+					if (this.tabBars[i].template === 'index') {
+						aryItem.data = data.data;
+					}
+					ary.push(aryItem);
+				}
+				return ary;
+			},
+			async addData(callback,isfresh=false) {
+				let e = this.tabIndex;
+				const id = e + 1
+				const page = isfresh ? 1 : Math.ceil(this.newItems[e].data.length / 5) + 1;
+				const [error, result] = await uni.request({
+					url: `http://ceshi3.dishait.cn/api/index_category/${id}/data/${page}`,
+					method: 'GET',
+				});
+				if (error) {
+					uni.showToast({
+						title: error.errMsg,
+						icon: "none"
+					})
+					return;
+				}
+				if (result.statusCode != 200) {
+					uni.showToast({
+						title: result.data.msg,
+						icon: "none"
+					})
+					return;
+				}
+				//成功
+				const data = result.data.data;
+				this.newItems[e].data = !isfresh ? [...this.newItems[e].data, ...data] : data;
+				callback && callback()
+				this.newItems[e].firstLoad = 'after'
+				if (data.length < 5) {
+					this.newItems[e].loadingText = '没有更多了'
+					return
+				}
+			}
+		}
+	}
+</script>
+
+<style src="@/common/zcm-main-nvue.css"></style>
+<style>
+
+</style>

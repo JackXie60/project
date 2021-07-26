@@ -1,0 +1,1 @@
+<view class="p-2 mt-1"><block wx:for="{{items}}" wx:for-item="item" wx:for-index="index" wx:key="index"><view class="border px-2 py-1 d-inline-block m-1" style="{{$root.m0}}">{{''+item.name+''}}</view></block></view>

@@ -1,0 +1,39 @@
+<template>
+	<!-- 列表组件 -->
+	<div class="row w-100">
+		<block v-for="(item ,index) in list" :key="index">
+			<div class="col-6" style="padding-left: 2.5px;padding-right:2.5px ;" @click="openDetail(item)">
+				<image :src="item.cover" style="width: 370px;height: 370px;">
+				</image>
+				<text class="font-md text-dark px-3 py-1" style="lines:1">{{ item.title }}</text>
+				<text class="px-3 text-muted font-sm" style="lines: 1;">{{ item.desc }}</text>
+				<div class="d-flex px-3 pt-1">
+					<price>{{ item.pprice }}</price>
+					<text class="text-muted line-through font-sm ml-1"
+						style="align-self:flex-end">￥{{ item.oprice }}</text>
+				</div>
+			</div>
+		</block>
+	</div>
+</template>
+
+<script>
+	import price from '@/components/comm/nvue/price.nvue'
+	export default {
+		components:{
+			price,
+		},
+		props:['list'],
+		methods:{
+			openDetail(item){
+				uni.navigateTo({
+					url:'/pages/detail/detail?detail='+JSON.stringify(item)
+				})
+			}
+		}
+	}
+</script>
+<style src="@/common/zcm-main-nvue.css"></style>
+<style>
+
+</style>

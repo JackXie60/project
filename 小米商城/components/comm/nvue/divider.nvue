@@ -1,0 +1,14 @@
+<template>
+	<!-- 分割线 -->
+	<div style="height: 18px;background-color: #F5F5F5;"></div>
+</template>
+
+<script>
+	export default {
+		
+	}
+</script>
+
+<style>
+
+</style>

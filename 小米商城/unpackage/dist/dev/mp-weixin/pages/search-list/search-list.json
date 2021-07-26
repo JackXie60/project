@@ -1,0 +1,9 @@
+{
+  "onReachBottomDistance": 50,
+  "usingComponents": {
+    "uni-drawer": "/components/uni-ui/uni-drawer/uni-drawer",
+    "card": "/components/comm/card",
+    "my-radio-group": "/components/search-list/radio-group",
+    "goods-list": "/components/search-list/goods_list"
+  }
+}

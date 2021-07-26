@@ -1,0 +1,44 @@
+<template>
+	<div class="w-100" style="height: 75px;">
+		<scroller class="d-flex w-100" style="height: 75px;" :show-scrollbar="false" scroll-direction="horizontal" :animation='true'>
+			<div  :ref="`tab${index}`" @click="change(index)" style="height: 75px;width: 120px;" class="d-flex a-center j-center" v-for="(item,index) in tabBar" :key="index">
+				<text class="text-muted font" style="height: 75px;line-height: 75px;" :style="{'border-bottom':tabIndex===index?'5px solid #fd6801':'none'}">{{ item.name }}</text>
+			</div>
+		</scroller>
+	</div>
+</template>
+
+<script>
+	const dom = weex.requireModule('dom')
+	export default {
+		props:['tabBar','tabIndex'],
+		watch:{
+			tabIndex(newVal,oldVal){
+				if(newVal!==oldVal){
+					this.change(newVal)
+				}
+			}
+		},
+		methods:{
+			change(index){
+				this.tabIndex = index;
+				let curEl = this.$refs[`tab${index}`][0];
+				dom.getComponentRect(curEl,res=>{
+					if(res.size.right>750){
+						const newEl = this.$refs[`tab${index-4}`][0];
+						return dom.scrollToElement(newEl,{})
+					}
+					if(res.size.left<0){
+						return dom.scrollToElement(curEl,{})
+					}
+				})
+				this.$emit('changeBar',index)
+			},
+		}
+	}
+</script>
+
+<style src="@/common/zcm-main-nvue.css"></style>
+<style>
+
+</style>

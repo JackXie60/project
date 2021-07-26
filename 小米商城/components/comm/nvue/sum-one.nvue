@@ -1,0 +1,24 @@
+<template>
+	<!-- 大图广告 -->
+	<div class="w-100">
+		<div class="p-2 border-bottom">
+			<slot name="title">
+				<text class="font font-weight">{{ titleHead }}</text>
+			</slot>
+		</div>
+		<div>
+			<image v-if="bodyCover" :src="bodyCover" style="height: 300px;"></image>
+			<slot></slot>
+		</div>
+	</div>
+</template>
+
+<script>
+	export default {
+		props:['titleHead','bodyCover']
+	}
+</script>
+<style src="@/common/zcm-main-nvue.css"></style>
+<style>
+
+</style>
